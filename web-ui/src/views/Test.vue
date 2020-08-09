@@ -1,5 +1,9 @@
 <template>
-    <div class="about">
+    <div id="app">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" @click="openAdd">
+            Add
+        </button>
+
         <table class="table table-dark">
             <thead>
             <tr>
@@ -11,6 +15,7 @@
                 <th scope="col">更新人</th>
                 <th scope="col">创建时间</th>
                 <th scope="col">创建人</th>
+                <th scope="col">操作</th>
             </tr>
             </thead>
             <tbody>
@@ -23,6 +28,12 @@
                 <td>{{page.updaterCode}}</td>
                 <td>{{page.createTime}}</td>
                 <td>{{page.creatorCode}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                            @click="openEdit(page.id)">Edit
+                    </button>&nbsp;&nbsp;
+                    <button type="button" class="btn btn-danger" @click="deleteData(page.id)">Delete</button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -45,11 +56,19 @@
                 </li>
             </ul>
         </nav>
+
+        <test-edit :id="editId" @saveData="saveData" @updateData="updateData"></test-edit>
     </div>
 </template>
 
 <script>
+
+    import TestEdit from '../components/TestEdit';
+
     export default {
+        components: {
+            TestEdit
+        },
         data() {
             return {
                 pageData: [],
@@ -57,7 +76,9 @@
                     current: 0,
                     pageSize: 10,
                     total: 0
-                }
+                },
+                editId: null,
+                message: null
             }
         },
         created() {
@@ -73,6 +94,47 @@
                     this.page.current = res.data.current;
                     this.page.total = res.data.total;
                 })
+            },
+            openAdd() {
+                this.editId = null;
+                // this.$confirm({
+                //     type: '提示',
+                //     msg: '是否删除这条信息？',
+                //     btn: {
+                //         ok: 'yes',
+                //         no: 'no'
+                //     }
+                // }).then(() => {
+                //     console.log('ok')
+                // }).catch(() => {
+                //     console.log('no')
+                // })
+
+            },
+            openEdit(id) {
+                this.editId = id;
+            },
+            deleteData(id) {
+                console.info("delete id:" + id);
+                const url = "/api/goodsBrandApi/delById/" + id;
+                this.$http.delete(url).then(res => {
+                    console.info("delete success:" + res.data);
+                    this.getList();
+                });
+            },
+            saveData(brand) {
+                const url = "/api/goodsBrandApi/add";
+                this.$http.post(url, brand).then(res => {
+                    console.info("save success:" + res.data);
+                    this.getList();
+                });
+            },
+            updateData(brand) {
+                const url = "/api/goodsBrandApi/update";
+                this.$http.put(url, brand).then(res => {
+                    console.info("update success:" + res.data);
+                    this.getList();
+                });
             }
         }
     }

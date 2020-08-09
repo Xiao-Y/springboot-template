@@ -9,6 +9,10 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'font-awesome/css/font-awesome.min.css'
 
+//这里就是对组件的绑定
+import theConfirm from './components/confirm.js'
+Vue.prototype.$confirm = theConfirm;
+
 
 Vue.config.productionTip = false
 
