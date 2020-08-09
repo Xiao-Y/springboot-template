@@ -48,6 +48,9 @@ public class MybatisRedisCache implements Cache {
 
     @Override
     public void putObject(Object key, Object value) {
+        if (key.toString().contains("selectPage")) {
+            return;
+        }
         RedisTemplate redisTemplate = getRedisTemplate();
         redisTemplate.boundHashOps(getId()).put(key, value);
         redisTemplate.boundHashOps(getId()).expire(EXPIRE_TIME_IN_MINUTES, TimeUnit.MINUTES);
@@ -58,6 +61,9 @@ public class MybatisRedisCache implements Cache {
 
     @Override
     public Object getObject(Object key) {
+        if (key.toString().contains("selectPage")) {
+            return null;
+        }
         RedisTemplate redisTemplate = getRedisTemplate();
         Object value = redisTemplate.boundHashOps(getId()).get(key);
         log.info("Get cached query result from redis");
