@@ -9,6 +9,7 @@ import com.billow.product.dao.GoodsBrandDao;
 import com.billow.product.pojo.po.GoodsBrandPo;
 import com.billow.product.pojo.vo.GoodsBrandVo;
 import com.billow.product.service.GoodsBrandService;
+import com.billow.util.ToolsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,9 @@ public class GoodsBrandServiceImpl extends ServiceImpl<GoodsBrandDao, GoodsBrand
         IPage<GoodsBrandPo> page = new Page<>(goodsBrandVo.getPageNo(), goodsBrandVo.getPageSize());
         LambdaQueryWrapper<GoodsBrandPo> wrapper = Wrappers.lambdaQuery();
         // 查询条件
+        if (ToolsUtils.isNotEmpty(goodsBrandVo.getBrandName())) {
+            wrapper.eq(GoodsBrandPo::getBrandName, goodsBrandVo.getBrandName());
+        }
         IPage<GoodsBrandPo> selectPage = goodsBrandDao.selectPage(page, wrapper);
         return selectPage;
     }
