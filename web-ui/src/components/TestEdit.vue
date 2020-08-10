@@ -1,7 +1,5 @@
 <template>
     <div id="app">
-
-
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -53,11 +51,14 @@
             }
         },
         methods: {
+            setEmpty(){
+                this.brand.id = null;
+                this.brand.brandName = null;
+                this.brand.brandSort = null;
+            },
             queryDataById() {
                 if (!this.id) {
-                    this.brand.id = null;
-                    this.brand.brandName = null;
-                    this.brand.brandSort = null;
+                    this.setEmpty();
                     return;
                 }
                 this.$http.get("/api/goodsBrandApi/findById/" + this.id).then(res => {

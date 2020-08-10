@@ -57,7 +57,7 @@
             </ul>
         </nav>
 
-        <test-edit :id="editId" @saveData="saveData" @updateData="updateData"></test-edit>
+        <test-edit ref="editRef" :id="editId" @saveData="saveData" @updateData="updateData"></test-edit>
     </div>
 </template>
 
@@ -96,31 +96,29 @@
                 })
             },
             openAdd() {
+                this.$refs.editRef.setEmpty();
                 this.editId = null;
-                // this.$confirm({
-                //     type: '提示',
-                //     msg: '是否删除这条信息？',
-                //     btn: {
-                //         ok: 'yes',
-                //         no: 'no'
-                //     }
-                // }).then(() => {
-                //     console.log('ok')
-                // }).catch(() => {
-                //     console.log('no')
-                // })
-
             },
             openEdit(id) {
+                this.$refs.editRef.setEmpty();
                 this.editId = id;
             },
             deleteData(id) {
                 console.info("delete id:" + id);
-                const url = "/api/goodsBrandApi/delById/" + id;
-                this.$http.delete(url).then(res => {
-                    console.info("delete success:" + res.data);
-                    this.getList();
+                this.$confirm({
+                    title: '删除',
+                    msg: '是否删除这条信息？'
+                }).then(() => {
+                    console.log('ok')
+                    const url = "/api/goodsBrandApi/delById/" + id;
+                    this.$http.delete(url).then(res => {
+                        console.info("delete success:" + res.data);
+                        this.getList();
+                    });
+                }).catch(() => {
+                    console.log('no')
                 });
+
             },
             saveData(brand) {
                 const url = "/api/goodsBrandApi/add";
