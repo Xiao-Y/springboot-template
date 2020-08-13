@@ -13,12 +13,22 @@ import 'font-awesome/css/font-awesome.min.css'
 import theConfirm from './components/confirm.js'
 Vue.prototype.$confirm = theConfirm;
 
+import moment from 'moment'
 
-Vue.config.productionTip = false
+import Calendar from './components/Calendar.js';
+Vue.use(Calendar);
 
-Vue.prototype.$http = axios    //全局注册，使用方法为:this.$http
+Vue.config.productionTip = false;
+
+Vue.prototype.$http = axios;    //全局注册，使用方法为:this.$http
 
 new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+    router,
+    render: h => h(App)
+}).$mount('#app');
+
+// 时间格式化
+Vue.filter('dateformat', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
+    return moment(dataStr).format(pattern)
+
+});

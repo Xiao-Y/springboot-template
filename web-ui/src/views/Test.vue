@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <form>
+        <form class="search">
             <div class="row">
                 <div class="col col-md-10">
                     <input type="text" class="form-control" placeholder="品牌名称" v-model="queryFilter.brandName">
@@ -36,16 +36,18 @@
                 <td>{{page.brandName}}</td>
                 <td>{{page.brandSort}}</td>
                 <td>{{page.validInd}}</td>
-                <td>{{page.updateTime}}</td>
-                <td>{{page.updaterCode}}</td>
-                <td>{{page.createTime}}</td>
                 <td>{{page.creatorCode}}</td>
+                <td>{{page.createTime | dateformat('YYYY-MM-DD HH:mm:ss')}}</td>
+                <td>{{page.updaterCode}}</td>
+                <td>{{page.updateTime | dateformat('YYYY-MM-DD HH:mm:ss')}}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
                                 @click="openEdit(page.id)">Edit
                         </button>
-                        <button type="button" class="btn btn-warning" :disabled="!page.validInd" @click="prohibitData(page)">Prohibit</button>
+                        <button type="button" class="btn btn-warning" :disabled="!page.validInd"
+                                @click="prohibitData(page)">Prohibit
+                        </button>
                         <button type="button" class="btn btn-danger" @click="deleteData(page.id)">Delete</button>
                     </div>
                 </td>
@@ -108,7 +110,7 @@
                 let param = this.queryFilter;
                 this.$http.post(url, param).then(res => {
                     console.info(res);
-                    this.$set(this,"pageData",res.data.records)
+                    this.$set(this, "pageData", res.data.records)
                     this.page.current = res.data.current;
                     this.page.total = res.data.total;
                 })
@@ -172,3 +174,8 @@
         }
     }
 </script>
+<style>
+    .search {
+        margin-bottom: 6px;
+    }
+</style>
